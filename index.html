@@ -559,7 +559,7 @@ const App = {
   methods: {
     //this formats the hour info without a library
     getCurrentHour(zone) {
-      console.log("getCurrentHour");
+      // console.log("getCurrentHour");
       let newhr = new Date().toLocaleTimeString("en", {
         hour: "2-digit",
         minute: "2-digit",
@@ -717,6 +717,7 @@ const App = {
       return tl;
     },
     animTime(time, period) {
+      // console.log("animTime");
       this.daynight().timeScale(1).pause();
       if (period == this.lastM) {
         TweenMax.fromTo(
@@ -742,7 +743,9 @@ const App = {
     refreshTime() {
       var that = this;
       setInterval(function() {
-         that.tttt = that.getCurrentHour(that.checked.region);
+          that.tttt = that.getCurrentHour(that.checked.region);
+          let peri = that.tttt.slice(-2)
+          that.animTime(that.tttt, peri)
       }, 1000);
     }
   },
