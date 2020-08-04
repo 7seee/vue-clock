@@ -125,7 +125,7 @@
       </g>
     </g>
     <text transform="translate(325 465.2)" font-size="36" fill="#fff" font-family="MyriadPro-Semibold, Myriad Pro" font-weight="700" text-anchor="middle">
-      {{ timeVal }} 
+      {{ tttt }} 
     </text>
     <text transform="translate(281.8 423.9)" font-size="17.23" fill="#686571" font-family="MyriadPro-Semibold, Myriad Pro" font-weight="700">
       <tspan letter-spacing="-0.04em">L</tspan><tspan x="7.8" y="0" letter-spacing="0em">O</tspan><tspan x="19.9" y="0" letter-spacing="0.01em">C</tspan><tspan x="30.2" y="0">AL</tspan><tspan x="49.6" y="0" letter-spacing="-0.04em"> </tspan><tspan x="52.5" y="0">TIME</tspan>
@@ -541,12 +541,6 @@
     </g>
   </g>
 </svg>
-  
-  <select id="dateselect" v-model="checked">
-    <option selected="checked" value="choose">Choose</option>
-    <option v-for="date in dates" :value="date">        {{ date.city }}
-    </option>
-  </select>
 
 </div>
 <script>
@@ -556,58 +550,21 @@ const App = {
       checked: "choose",
       tlProg: 0,
       lastM: "",
+      tttt: "",
       dates: [
-        { city: "Honolulu", region: "Pacific/Honolulu" },
-        { city: "Anchorage", region: "America/Anchorage" },
-        { city: "Los Angeles", region: "America/Los_Angeles" },
-        { city: "San Francisco", region: "America/Los_Angeles" },
-        { city: "Vancouver", region: "America/Vancouver" },
-        { city: "Phoenix", region: "America/Phoenix" },
-        { city: "Denver", region: "America/Denver" },
-        { city: "Costa Rica", region: "America/Costa_Rica" },
-        { city: "Chicago", region: "America/Chicago" },
-        { city: "Cancun", region: "America/Cancun" },
-        { city: "Jamaica", region: "America/Jamaica" },
-        { city: "Toronto", region: "America/Toronto" },
-        { city: "Puerto Rico", region: "America/Puerto_Rico" },
-        { city: "Dublin", region: "Europe/Dublin" },
-        { city: "London", region: "Europe/London" },
-        { city: "Rome", region: "Europe/Rome" },
-        { city: "Vatican", region: "Europe/Vatican" },
-        { city: "Berlin", region: "Europe/Berlin" },
-        { city: "Prague", region: "Europe/Prague" },
-        { city: "Madrid", region: "Europe/Madrid" },
-        { city: "Paris", region: "Europe/Paris" },
-        { city: "Warsaw", region: "Europe/Warsaw" },
-        { city: "Algiers", region: "Africa/Algiers" },
-        { city: "Athens", region: "Europe/Athens" },
-        { city: "Cairo", region: "Africa/Cairo" },
-        { city: "Johannesburg", region: "Africa/Johannesburg" },
-        { city: "Istanbul", region: "Europe/Istanbul" },
-        { city: "Jerusalem", region: "Asia/Jerusalem" },
-        { city: "Baghdad", region: "Asia/Baghdad" },
-        { city: "Kuwait", region: "Asia/Kuwait" },
-        { city: "Addis Ababa", region: "Africa/Addis_Ababa" },
-        { city: "Tehran", region: "Asia/Tehran" },
-        { city: "Moscow", region: "Europe/Moscow" },
-        { city: "Katmandu", region: "Asia/Katmandu" },
-        { city: "Hong Kong", region: "Asia/Hong_Kong" },
-        { city: "Kuala Lumpur", region: "Asia/Kuala_Lumpur" },
-        { city: "Singapore", region: "Asia/Singapore" },
-        { city: "Perth", region: "Australia/Perth" },
         { city: "Tokyo", region: "Asia/Tokyo" },
-        { city: "Melbourne", region: "Australia/Melbourne" }
       ]
     };
   },
   methods: {
     //this formats the hour info without a library
     getCurrentHour(zone) {
+      console.log("getCurrentHour");
       let newhr = new Date().toLocaleTimeString("en", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
-        timeZone: zone
+        timeZone: "Asia/Tokyo"
       });
       return newhr;
     },
@@ -781,17 +738,23 @@ const App = {
       }
       this.tlProg = time;
       this.lastM = period;
+    },
+    refreshTime() {
+      var that = this;
+      setInterval(function() {
+         that.tttt = that.getCurrentHour(that.checked.region);
+      }, 1000);
     }
   },
+  created: function() {
+    this.refreshTime();
+  },
   computed: {
-    timeVal() {
-      return this.getCurrentHour(this.checked.region);
-    }
   },
   watch: {
     checked() {
-      let period = this.timeVal.slice(-2),
-        hr = this.timeVal.slice(0, this.timeVal.indexOf(":"));
+      let period = this.tttt.slice(-2),
+        hr = this.tttt.slice(0, this.tttt.indexOf(":"));
 
       const dayhr = 12,
         rpos = 115,
